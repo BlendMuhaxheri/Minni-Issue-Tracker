@@ -148,3 +148,18 @@ Run:
 ```bash
 php artisan migrate:fresh --seed
 ```
+
+## Design Decisions & Future Improvements
+
+### Blade Components
+
+For this version, Blade components were intentionally not heavily used in order to keep the structure simple and focus on backend logic, relationships, and AJAX interactions.
+
+In a more advanced iteration, reusable Blade components could be introduced for:
+
+- Issue cards
+- Tag elements
+- Modals (tags / members)
+- Form inputs and validation states
+
+This would reduce duplication and improve UI consistency across the application.
