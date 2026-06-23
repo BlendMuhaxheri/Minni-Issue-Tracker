@@ -1,58 +1,150 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini Issue Tracker (Laravel 13)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A lightweight issue tracking system built with Laravel 13, Blade, and vanilla JavaScript (AJAX).  
+It allows teams to manage projects, issues, tags, members, and comments in a structured workflow.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Projects
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Create, edit, delete projects
+- Each project belongs to a user (owner)
+- Projects contain multiple issues
+- Start date & deadline support
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Issues
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Full CRUD system
+- Belongs to a project
+- Status tracking:
+    - Open
+    - In Progress
+    - Closed
+- Priority levels:
+    - Low
+    - Medium
+    - High
+- Due date support
+- Filter issues by:
+    - Status
+    - Priority
+    - Tags
+- Search support (title & description)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+### Tags (AJAX)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- Create and manage tags
+- Attach / detach tags to issues without page reload
+- Many-to-many relationship with issues
+
+---
+
+### Members (Bonus Feature)
+
+- Assign multiple users to an issue
+- Many-to-many relationship (`issue_user`)
+- Attach / detach members via AJAX
+- Display assigned users on issue detail page
+
+---
+
+### Comments (AJAX + Pagination)
+
+- Add comments without page reload
+- Load comments asynchronously
+- Paginated comment loading
+- New comments are prepended dynamically
+
+---
+
+## Tech Stack
+
+- Laravel 13
+- Blade Templates
+- Vanilla JavaScript (no frontend framework)
+- MySQL
+- Eloquent ORM
+- AJAX (Fetch API)
+- PHP 8.1+ Enums
+
+---
+
+## Database Structure
+
+### Main Entities
+
+- **User**
+- **Project**
+    - user_id (owner)
+    - name
+    - description
+    - start_date
+    - deadline
+
+- **Issue**
+    - project_id
+    - title
+    - description
+    - status (enum)
+    - priority (enum)
+    - due_date
+
+- **Tag**
+    - name (unique)
+    - color (nullable)
+
+- **Comment**
+    - issue_id
+    - author_name
+    - body
+
+---
+
+### Pivot Tables
+
+- `issue_tag` → issues ↔ tags
+- `issue_user` → issues ↔ users (members)
+
+---
+
+## Authorization
+
+- Policies used for project ownership
+- Only project owner can:
+    - Edit project
+    - Delete project
+
+---
+
+## AJAX Features
+
+- Tag attach/detach without reload
+- Member assignment without reload
+- Comment creation without reload
+- Comment pagination (load more)
+- Dynamic UI updates
+
+---
+
+## Seeding
+
+The project includes realistic seed data:
+
+- 5 users
+- 3 projects per user
+- 15 issues
+- Multiple tags per issue
+- Multiple members per issue
+- 2–6 comments per issue
+
+Run:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+php artisan migrate:fresh --seed
 ```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
